@@ -53,13 +53,11 @@ def reorderList(head: ListNode) -> None:
     if not head or not head.next:
         return
     
-    # 1. Знайти середину списку
     slow, fast = head, head
     while fast and fast.next:
         slow = slow.next
         fast = fast.next.next
         
-    # 2. Перевернути другу половину списку
     prev, curr = None, slow.next
     slow.next = None
     while curr:
@@ -68,7 +66,6 @@ def reorderList(head: ListNode) -> None:
         prev = curr
         curr = nxt
         
-    # 3. З'єднати дві половини
     first, second = head, prev
     while second:
         tmp1, tmp2 = first.next, second.next
@@ -80,10 +77,6 @@ def reorderList(head: ListNode) -> None:
 # 5. Видалити вузол у зв’язаному списку
 # ==========================================
 def deleteNode(node: ListNode) -> None:
-    """
-    Модифікує вузол на місці, копіюючи значення наступного 
-    і видаляючи наступний вузол.
-    """
     node.val = node.next.val
     node.next = node.next.next
 
@@ -91,7 +84,6 @@ def deleteNode(node: ListNode) -> None:
 # 6. Подвоїти число, представлене у вигляді зв’язаного списку
 # ==========================================
 def doubleIt(head: ListNode) -> ListNode:
-    # Допоміжна функція для перевертання списку
     def reverse(node: ListNode) -> ListNode:
         prev, curr = None, node
         while curr:
@@ -102,7 +94,6 @@ def doubleIt(head: ListNode) -> ListNode:
         return prev
 
     head = reverse(head)
-    
     curr = head
     carry = 0
     prev = None
@@ -153,9 +144,8 @@ def reverseKGroup(head: ListNode, k: int) -> ListNode:
             break
             
         groupNext = kth.next
-        
-        # Перевертаємо групу
         prev, curr = kth.next, groupPrev.next
+        
         while curr != groupNext:
             tmp = curr.next
             curr.next = prev
@@ -192,3 +182,61 @@ def partition(head: ListNode, x: int) -> ListNode:
     less.next = greater_head.next
     
     return less_head.next
+
+
+# ==========================================
+# Блок для локального тестування коду
+# ==========================================
+if __name__ == "__main__":
+    def to_ll(arr):
+        if not arr: return None
+        head = ListNode(arr[0])
+        curr = head
+        for val in arr[1:]:
+            curr.next = ListNode(val)
+            curr = curr.next
+        return head
+
+    def to_list(head):
+        res = []
+        while head:
+            res.append(head.val)
+            head = head.next
+        return res
+
+    print("--- Завдання 1 ---")
+    l1 = to_ll([1, 2, 4])
+    l2 = to_ll([1, 3, 4])
+    print("Output:", to_list(mergeTwoLists(l1, l2)))
+
+    print("\n--- Завдання 2 ---")
+    print("Output:", to_list(deleteDuplicates(to_ll([1, 1, 2, 3, 3]))))
+
+    print("\n--- Завдання 3 ---")
+    # Створюємо список і штучно робимо цикл для перевірки (хвіст вказує на вузол "2")
+    l3 = to_ll([3, 2, 0, -4])
+    l3.next.next.next.next = l3.next 
+    print("Output (has cycle?):", hasCycle(l3))
+
+    print("\n--- Завдання 4 ---")
+    l4 = to_ll([1, 2, 3, 4])
+    reorderList(l4)
+    print("Output:", to_list(l4))
+
+    print("\n--- Завдання 5 ---")
+    l5 = to_ll([4, 5, 1, 9])
+    deleteNode(l5.next) 
+    print("Output:", to_list(l5))
+
+    print("\n--- Завдання 6 ---")
+    print("Output:", to_list(doubleIt(to_ll([1, 8, 9]))))
+
+    print("\n--- Завдання 7 ---")
+    list_arr = [to_ll([1, 4, 5]), to_ll([1, 3, 4]), to_ll([2, 6])]
+    print("Output:", to_list(mergeKLists(list_arr)))
+
+    print("\n--- Завдання 8 ---")
+    print("Output:", to_list(reverseKGroup(to_ll([1, 2, 3, 4, 5]), 2)))
+
+    print("\n--- Завдання 9 ---")
+    print("Output:", to_list(partition(to_ll([1, 4, 3, 2, 5, 2]), 3)))
